@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.luizgadao.cadastroaluno.app.dao.StudentDAO;
 import com.luizgadao.cadastroaluno.app.model.Student;
+import com.luizgadao.cadastroaluno.app.utils.Extra;
 
 
 public class FormAddActivity extends ActionBarActivity {
@@ -21,7 +22,7 @@ public class FormAddActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_add);
 
-        final Student studentSelected = (Student) getIntent().getSerializableExtra( "student-selected" );
+        final Student studentSelected = (Student) getIntent().getSerializableExtra(Extra.STUDENT_SELECTED );
 
         formHelper = new FormHelper(this);
 
@@ -50,7 +51,7 @@ public class FormAddActivity extends ActionBarActivity {
 
         if ( studentSelected != null )
         {
-            buttonSave.setText( "Edit" );
+            buttonSave.setText( "SAVE" );
             formHelper.setStudentData( studentSelected );
         }
 

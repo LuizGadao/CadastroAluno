@@ -1,6 +1,7 @@
 package com.luizgadao.cadastroaluno.app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.luizgadao.cadastroaluno.app.dao.StudentDAO;
 import com.luizgadao.cadastroaluno.app.model.Student;
+import com.luizgadao.cadastroaluno.app.utils.Extra;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +49,9 @@ public class MainActivity extends ActionBarActivity {
                 Student studentSelected = (Student) listView.getItemAtPosition( index );
 
                 Intent intent = new Intent( MainActivity.this, FormAddActivity.class );
-                intent.putExtra( "student-selected", studentSelected );
+                intent.putExtra(Extra.STUDENT_SELECTED, studentSelected );
 
                 startActivity( intent );
-
                 //Toast.makeText( MainActivity.this, "click-index: " + index, Toast.LENGTH_SHORT ).show();
             }
         });
@@ -93,13 +94,70 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
-        menu.add( "Call" );
-        menu.add( "Send SMS" );
-        menu.add( "Send E-MAIL" );
-        menu.add( "Go to site" );
-        menu.add( "See on the map" );
-        MenuItem deleteItem =  menu.add( "Delete" );
+        MenuItem callItem = ( MenuItem ) menu.add( "Call" );
+        callItem.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent callIntent = new Intent( Intent.ACTION_CALL );
+                Uri phoneToCall = Uri.parse( "tel:" + student.getPhone() );
+                callIntent.setData( phoneToCall );
 
+                startActivity( callIntent );
+
+                return false;
+            }
+        });
+
+        MenuItem smsItem = menu.add( "Send SMS" );
+        smsItem.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                Intent intentSms = new Intent( Intent.ACTION_VIEW );
+                intentSms.setData( Uri.parse( "sms:" + student.getPhone() ) );
+                intentSms.putExtra( "sms_body", "um teste de sms..." );
+
+                startActivity(intentSms);
+
+                return false;
+            }
+        });
+
+        menu.add( "Send E-MAIL" );
+        MenuItem siteItem = menu.add( "Go to site" );
+        siteItem.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                String site = student.getSite();
+                if( site.contains("http://") == false )
+                    site = "http://" + site;
+
+                Intent openSite = new Intent( Intent.ACTION_VIEW );
+                Uri siteToGo = Uri.parse( site );
+                openSite.setData( siteToGo );
+
+                startActivity( openSite );
+
+                return false;
+            }
+        });
+
+        MenuItem mapItem =  menu.add( "See on the map" );
+        mapItem.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                Intent mapIntent = new Intent( Intent.ACTION_VIEW );
+                mapIntent.setData( Uri.parse( "geo:0,0?z=14&q=" + student.getAddress() ) );
+
+                startActivity( mapIntent );
+
+                return false;
+            }
+        });
+
+        MenuItem deleteItem =  menu.add( "Delete" );
         deleteItem.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
