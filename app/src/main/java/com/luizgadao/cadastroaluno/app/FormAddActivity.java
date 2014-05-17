@@ -1,21 +1,34 @@
 package com.luizgadao.cadastroaluno.app;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.media.Image;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 
 import com.luizgadao.cadastroaluno.app.dao.StudentDAO;
 import com.luizgadao.cadastroaluno.app.model.Student;
 import com.luizgadao.cadastroaluno.app.utils.Extra;
 
+import java.io.File;
+import java.net.URI;
+
 
 public class FormAddActivity extends ActionBarActivity {
 
     private FormHelper formHelper;
+    private String pathFile;
+    private static final int TAKE_PHOTO = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +66,47 @@ public class FormAddActivity extends ActionBarActivity {
         {
             buttonSave.setText( "SAVE" );
             formHelper.setStudentData( studentSelected );
+        }
+
+        ImageView photo = formHelper.getImageView();
+        photo.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intentCam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                // criar um caminho onde a imagem vai ser armazenada.
+                pathFile = Environment.getExternalStorageDirectory().toString() + "/" + System.currentTimeMillis() + ".png  ";
+
+                //criar um arquivo baseado no caminho
+                File file = new File( pathFile );
+                //criar uma uri baseada no arquivo, para o android reconhecer onde o arquivo vai ser armazenado
+                Uri photoLocal = Uri.fromFile( file );
+                //informa a intent onde vai ser salvo o caminho da imagem.
+                intentCam.putExtra( MediaStore.EXTRA_OUTPUT, photoLocal );
+
+                startActivityForResult(intentCam, TAKE_PHOTO);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.d( "FormActivity => ", "RESULT: " + requestCode );
+        if( requestCode == TAKE_PHOTO )
+        {
+            // Se o resulstado da intent for ok, salva o path da image, senão, anula o path.
+            if ( resultCode == Activity.RESULT_OK )
+            {
+                Log.d( "FormActivity => ", "RESULT_OK" );
+                formHelper.loadImage( pathFile );
+            }
+            else
+            {
+                pathFile = null;
+            }
         }
 
     }

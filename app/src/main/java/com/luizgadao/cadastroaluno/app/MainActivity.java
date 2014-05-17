@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -124,6 +125,7 @@ public class MainActivity extends ActionBarActivity {
         });
 
         menu.add( "Send E-MAIL" );
+
         MenuItem siteItem = menu.add( "Go to site" );
         siteItem.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
             @Override
