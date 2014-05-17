@@ -96,6 +96,14 @@ public class StudentDAO extends SQLiteOpenHelper
         getWritableDatabase().update( NAMETABLE, values, "id=?", args );
     }
 
+    public boolean isPhoneStudent( String phone )
+    {
+        String[] args = { phone };
+        Cursor cursor = getWritableDatabase().rawQuery( "SELECT id FROM Students WHERE phone = ?", args );
+
+        return cursor.moveToNext();
+    }
+
     private ContentValues toValues( Student student )
     {
         ContentValues values = new ContentValues();
@@ -109,4 +117,6 @@ public class StudentDAO extends SQLiteOpenHelper
 
         return values;
     }
+
+
 }

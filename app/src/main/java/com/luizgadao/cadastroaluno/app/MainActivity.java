@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.luizgadao.cadastroaluno.app.adapter.ListStudentAdapter;
 import com.luizgadao.cadastroaluno.app.dao.StudentDAO;
 import com.luizgadao.cadastroaluno.app.model.Student;
 import com.luizgadao.cadastroaluno.app.utils.Extra;
@@ -85,9 +86,10 @@ public class MainActivity extends ActionBarActivity {
         List<Student> students = studentsDao.getListStudents();
         studentsDao.close();
 
-        //capturando o layout padrão do android dos itens que vão ficar na lista.
-        int layout = android.R.layout.simple_list_item_1;
-        ArrayAdapter<Student> adapter = new ArrayAdapter<Student>( this, layout, students );
+        //int layout = android.R.layout.simple_list_item_1;
+        //ArrayAdapter<Student> adapter = new ArrayAdapter<Student>( this, layout, students );
+
+        ListStudentAdapter adapter = new ListStudentAdapter( this, students );
 
         listView.setAdapter( adapter );
     }
