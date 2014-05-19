@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.luizgadao.cadastroaluno.app.R;
 import com.luizgadao.cadastroaluno.app.model.Student;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -71,6 +73,16 @@ public class ListStudentAdapter extends BaseAdapter
         {
             Drawable drawable = activity.getResources().getDrawable( R.drawable.ic_no_image );
             thumb.setImageDrawable( drawable );
+        }
+
+
+        if ( row.findViewById( R.id.text_site ) != null )
+        {
+            TextView textSite = (TextView) row.findViewById( R.id.text_site );
+            textSite.setText( student.getSite() );
+
+            TextView textPhone = (TextView) row.findViewById( R.id.text_phone );
+            textPhone.setText( student.getPhone() );
         }
 
         return row;
