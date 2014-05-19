@@ -24,6 +24,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
         </activity>
+        <activity android:name=".TestsActivity"
+            android:label="@string/title_activity_tests"
+            android:parentActivityName=".MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="MainActivity" />
+
+        </activity>
 
         <receiver android:name=".receiver.SmsReceiver" android:enabled="true">
             <intent-filter>

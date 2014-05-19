@@ -75,7 +75,6 @@ public class ListStudentAdapter extends BaseAdapter
             thumb.setImageDrawable( drawable );
         }
 
-
         if ( row.findViewById( R.id.text_site ) != null )
         {
             TextView textSite = (TextView) row.findViewById( R.id.text_site );
@@ -87,6 +86,4 @@ public class ListStudentAdapter extends BaseAdapter
 
         return row;
     }
-
-
 }

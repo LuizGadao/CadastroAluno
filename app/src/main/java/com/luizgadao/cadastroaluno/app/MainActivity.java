@@ -205,6 +205,10 @@ public class MainActivity extends ActionBarActivity {
                 task.execute();
                 break;
 
+            case R.id.action_received_tests:
+                Intent intentReceived = new Intent( this, TestsActivity.class );
+                startActivity( intentReceived );
+
             default:
                 break;
         }
