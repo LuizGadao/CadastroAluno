@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.luizgadao.cadastroaluno.app.adapter.ListStudentAdapter;
 import com.luizgadao.cadastroaluno.app.dao.StudentDAO;
 import com.luizgadao.cadastroaluno.app.model.Student;
+import com.luizgadao.cadastroaluno.app.task.SendStudentTask;
 import com.luizgadao.cadastroaluno.app.utils.Extra;
 import com.luizgadao.cadastroaluno.app.utils.StudetsConverterToJson;
 import com.luizgadao.cadastroaluno.app.utils.WebClient;
@@ -200,40 +201,8 @@ public class MainActivity extends ActionBarActivity {
                 break;
 
             case R.id.action_synchronize:
-
-                Thread loadData = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        StudentDAO studentDAO = new StudentDAO( MainActivity.this );
-                        List<Student> students = studentDAO.getListStudents();
-                        studentDAO.close();
-
-                        String urlPost = "http://www.caelum.com.br/mobile";
-                        String jsonDadaStudents = new StudetsConverterToJson().toJson( students );
-                        try
-                        {
-                            WebClient client = new WebClient( urlPost );
-                            final String respJson = client.post( jsonDadaStudents );
-
-                            Log.d("LOAD-DATA: ", respJson);
-
-                            MainActivity.this.runOnUiThread( new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText( MainActivity.this, respJson, Toast.LENGTH_SHORT ).show();
-                                }
-                            } );
-                        }
-                        catch ( Exception e )
-                        {
-                            throw new RuntimeException( e );
-                        }
-                    }
-                };
-                loadData.start();
-
+                SendStudentTask task = new SendStudentTask( this );
+                task.execute();
                 break;
 
             default:
