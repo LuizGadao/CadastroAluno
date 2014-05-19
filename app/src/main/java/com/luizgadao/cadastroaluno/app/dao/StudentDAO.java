@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class StudentDAO extends SQLiteOpenHelper
 {
-    private static final String[] COLUNS = { "id", "name", "phone", "address", "site", "photo", "test" };
+    //private static final String[] COLUNS = { "id", "name", "phone", "address", "site", "photo", "test" };
     private static final String DATABASE = "DB_STUDENT";
     private static final String NAMETABLE = "Students";
     private static final int VERSION = 2;

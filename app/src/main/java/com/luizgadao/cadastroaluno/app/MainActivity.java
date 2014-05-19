@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,8 +16,9 @@ import com.luizgadao.cadastroaluno.app.adapter.ListStudentAdapter;
 import com.luizgadao.cadastroaluno.app.dao.StudentDAO;
 import com.luizgadao.cadastroaluno.app.model.Student;
 import com.luizgadao.cadastroaluno.app.utils.Extra;
+import com.luizgadao.cadastroaluno.app.utils.StudetsConverterToJson;
+import com.luizgadao.cadastroaluno.app.utils.WebClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -98,6 +96,11 @@ public class MainActivity extends ActionBarActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
         MenuItem callItem = ( MenuItem ) menu.add( "Call" );
+        MenuItem smsItem = menu.add( "Send SMS" );
+        menu.add( "Send E-MAIL" );
+        MenuItem mapItem =  menu.add( "See on the map" );
+        MenuItem deleteItem =  menu.add( "Delete" );
+
         callItem.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -111,7 +114,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        MenuItem smsItem = menu.add( "Send SMS" );
         smsItem.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -126,15 +128,13 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        menu.add( "Send E-MAIL" );
-
         MenuItem siteItem = menu.add( "Go to site" );
         siteItem.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
 
                 String site = student.getSite();
-                if( site.contains("http://") == false )
+                if( site.startsWith("http://") == false )
                     site = "http://" + site;
 
                 Intent openSite = new Intent( Intent.ACTION_VIEW );
@@ -147,7 +147,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        MenuItem mapItem =  menu.add( "See on the map" );
         mapItem.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -161,7 +160,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        MenuItem deleteItem =  menu.add( "Delete" );
         deleteItem.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -198,6 +196,28 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_add:
                 Intent intent = new Intent( this, FormAddActivity.class );
                 startActivity( intent );
+                break;
+
+            case R.id.action_synchronize:
+
+                StudentDAO studentDAO = new StudentDAO( this );
+                List<Student> students = studentDAO.getListStudents();
+                studentDAO.close();
+
+                String urlPost = "http://www.caelum.com.br/mobile";
+                String jsonDadaStudents = new StudetsConverterToJson().toJson( students );
+                try
+                {
+                    WebClient client = new WebClient( urlPost );
+                    String respJson = client.post( jsonDadaStudents );
+
+                    Toast.makeText( this, respJson, Toast.LENGTH_SHORT ).show();
+                }
+                catch ( Exception e )
+                {
+                    throw new RuntimeException( e );
+                }
+
                 break;
 
             default:

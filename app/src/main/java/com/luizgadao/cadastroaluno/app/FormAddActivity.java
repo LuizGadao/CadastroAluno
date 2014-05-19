@@ -64,7 +64,7 @@ public class FormAddActivity extends ActionBarActivity {
 
         if ( studentSelected != null )
         {
-            buttonSave.setText( "SAVE" );
+            buttonSave.setText( "SAVE-EDIT" );
             formHelper.setStudentData( studentSelected );
         }
 
