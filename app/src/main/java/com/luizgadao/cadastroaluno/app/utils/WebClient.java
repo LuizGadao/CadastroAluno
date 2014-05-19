@@ -30,8 +30,8 @@ public class WebClient
             post.setHeader("Content-type", "application/json");
             post.setHeader("Accept", "application/json");
 
-            HttpResponse httpResponse = client.execute(post);
-            HttpEntity resp = httpResponse.getEntity();
+            HttpResponse httpResponse   = client.execute(post);
+            HttpEntity resp             = httpResponse.getEntity();
 
             String respJson = EntityUtils.toString(resp);
 

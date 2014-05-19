@@ -19,13 +19,15 @@ public class StudetsConverterToJson
         {
             //{ "list":[ {"aluno":[ { "nome":"Maria", "nota":10 }, { "nome":"Maria", "nota":10 } ] } ] }
             JSONStringer js = new JSONStringer();
-            js.key("list").array();
-            js.key("aluno").array();
+            js.object().key("list").array();
+            js.object().key("aluno").array();
 
             for ( Student student : students )
             {
-                js.key("nome").value( student.getName() );
-                js.key("nota").value( student.getTestValue() );
+                js.object()
+                        .key("nome").value( student.getName() )
+                        .key("nota").value( student.getTestValue() )
+                .endObject();
             }
 
             js.endArray().endObject();

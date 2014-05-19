@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -200,23 +201,38 @@ public class MainActivity extends ActionBarActivity {
 
             case R.id.action_synchronize:
 
-                StudentDAO studentDAO = new StudentDAO( this );
-                List<Student> students = studentDAO.getListStudents();
-                studentDAO.close();
-
-                String urlPost = "http://www.caelum.com.br/mobile";
-                String jsonDadaStudents = new StudetsConverterToJson().toJson( students );
-                try
+                Thread loadData = new Thread()
                 {
-                    WebClient client = new WebClient( urlPost );
-                    String respJson = client.post( jsonDadaStudents );
+                    @Override
+                    public void run()
+                    {
+                        StudentDAO studentDAO = new StudentDAO( MainActivity.this );
+                        List<Student> students = studentDAO.getListStudents();
+                        studentDAO.close();
 
-                    Toast.makeText( this, respJson, Toast.LENGTH_SHORT ).show();
-                }
-                catch ( Exception e )
-                {
-                    throw new RuntimeException( e );
-                }
+                        String urlPost = "http://www.caelum.com.br/mobile";
+                        String jsonDadaStudents = new StudetsConverterToJson().toJson( students );
+                        try
+                        {
+                            WebClient client = new WebClient( urlPost );
+                            final String respJson = client.post( jsonDadaStudents );
+
+                            Log.d("LOAD-DATA: ", respJson);
+
+                            MainActivity.this.runOnUiThread( new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText( MainActivity.this, respJson, Toast.LENGTH_SHORT ).show();
+                                }
+                            } );
+                        }
+                        catch ( Exception e )
+                        {
+                            throw new RuntimeException( e );
+                        }
+                    }
+                };
+                loadData.start();
 
                 break;
 
