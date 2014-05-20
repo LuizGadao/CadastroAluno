@@ -1,10 +1,19 @@
 package com.luizgadao.cadastroaluno.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.luizgadao.cadastroaluno.app.fragment.DetailTestFragment;
+import com.luizgadao.cadastroaluno.app.fragment.ListTestFragment;
 import com.luizgadao.cadastroaluno.app.model.Test;
 
 import java.util.ArrayList;
@@ -14,34 +23,67 @@ import java.util.List;
 /**
  * Created by luizcarlos on 19/05/14.
  */
-public class TestsActivity extends Activity
+public class TestsActivity extends FragmentActivity
 {
+
+    public static final String TEST_SELECTED = "teste-selected";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView( R.layout.activity_tests );
+        setContentView( R.layout.tests );
 
-        ListView listViewTest = (ListView) this.findViewById( R.id.list_view_test );
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        int layout = android.R.layout.simple_list_item_1;
+        Log.d( "TestActivity", "is-tablet? " + isTabletLandScape() );
 
-        Test test1 = new Test();
-        test1.setName( "Matemática" );
-        test1.setData( "22/06/2014" );
-        test1.setDescription( "prova de matemática, sobre todo conteúdo abordado em sala de aula" );
-        test1.setTopics( Arrays.asList( "Tópico-1", "Tópico-2", "Tópico-3", "Tópico-4" ) );
+        if( isTabletLandScape() )
+        {
+            ListTestFragment listTestFragment = new ListTestFragment();
+            fragmentTransaction.replace( R.id.left_frame_test, listTestFragment );
 
-        Test test2 = new Test();
-        test2.setName( "Português" );
-        test2.setData( "22/06/2014" );
-        test2.setDescription( "prova de matemática, sobre todo conteúdo abordado em sala de aula" );
-        test2.setTopics( Arrays.asList( "Tópico-1", "Tópico-2", "Tópico-3", "Tópico-4" ) );
+            Bundle args = new Bundle();
+            args.putSerializable( TEST_SELECTED, listTestFragment.getFirstTest() );
+            DetailTestFragment detailTestFragment = new DetailTestFragment();
+            detailTestFragment.setArguments( args );
 
-        List<Test> listTests = Arrays.asList( test1, test2 );
-        ArrayAdapter adapter = new ArrayAdapter( this, layout, listTests );
+            fragmentTransaction.replace( R.id.right_frame_test, detailTestFragment );
+        }
+        else
+        {
+            fragmentTransaction.replace( R.id.only_frame_test, new ListTestFragment() );
+        }
 
-        listViewTest.setAdapter( adapter );
+        fragmentTransaction.commit();
+    }
+
+    public void selectTest( Test testSelected ) {
+        Log.d("TESTS-ACTIVITY", "SELECT-TEST");
+
+        Bundle args = new Bundle();
+        args.putSerializable(TEST_SELECTED, testSelected);
+
+        DetailTestFragment detailTestFragment = new DetailTestFragment();
+        detailTestFragment.setArguments(args);
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+
+        if (!isTabletLandScape()) {
+            transaction.replace(R.id.only_frame_test, detailTestFragment);
+            transaction.addToBackStack(null);
+        } else
+        {
+            transaction.replace( R.id.right_frame_test, detailTestFragment );
+        }
+
+        transaction.commit();
+    }
+
+    private boolean isTabletLandScape()
+    {
+        return getResources().getBoolean( R.bool.isTablet );
     }
 }
