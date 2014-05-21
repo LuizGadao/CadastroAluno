@@ -47,6 +47,9 @@ public class FormHelper
         student.setAddress( editAddress.getText().toString() );
         student.setTestValue( Double.valueOf(ratingBar.getRating()) );
 
+        if( this.student != null )
+            student.setPhoto( this.student.getPhoto() );
+
         return student;
     }
 

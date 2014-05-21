@@ -65,6 +65,7 @@ public class ListStudentAdapter extends BaseAdapter
 
         if ( student.getPhoto() != null )
         {
+            Log.d( "photo: ", student.getPhoto() );
             Bitmap image = BitmapFactory.decodeFile( student.getPhoto() );
             Bitmap thumbImage = Bitmap.createScaledBitmap( image, 90, 90, true );
             thumb.setImageBitmap( thumbImage );

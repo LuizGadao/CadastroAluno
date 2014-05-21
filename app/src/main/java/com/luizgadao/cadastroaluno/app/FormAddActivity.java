@@ -76,7 +76,7 @@ public class FormAddActivity extends ActionBarActivity {
                 Intent intentCam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                 // criar um caminho onde a imagem vai ser armazenada.
-                pathFile = Environment.getExternalStorageDirectory().toString() + "/" + System.currentTimeMillis() + ".png  ";
+                pathFile = Environment.getExternalStorageDirectory().toString() + "/" + System.currentTimeMillis() + ".png";
 
                 //criar um arquivo baseado no caminho
                 File file = new File( pathFile );

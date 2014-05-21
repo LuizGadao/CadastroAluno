@@ -112,6 +112,7 @@ public class StudentDAO extends SQLiteOpenHelper
         values.put( "phone",    student.getPhone() );
         values.put( "address",  student.getAddress() );
         values.put( "site",     student.getSite() );
+        //Log.d( "CONTENT-VALUES: ", student.getPhoto() );
         values.put( "photo",    student.getPhoto() );
         values.put( "test",     student.getTestValue() );
 
