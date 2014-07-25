@@ -2,9 +2,8 @@ package com.luizgadao.cadastroaluno.app;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,8 +17,6 @@ import com.luizgadao.cadastroaluno.app.dao.StudentDAO;
 import com.luizgadao.cadastroaluno.app.model.Student;
 import com.luizgadao.cadastroaluno.app.task.SendStudentTask;
 import com.luizgadao.cadastroaluno.app.utils.Extra;
-import com.luizgadao.cadastroaluno.app.utils.StudetsConverterToJson;
-import com.luizgadao.cadastroaluno.app.utils.WebClient;
 
 import java.util.List;
 
@@ -208,6 +205,12 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_received_tests:
                 Intent intentReceived = new Intent( this, TestsActivity.class );
                 startActivity( intentReceived );
+                break;
+
+            case R.id.action_mapa:
+                Intent intentMap = new Intent(this, MapActivity.class);
+                startActivity(intentMap);
+                break;
 
             default:
                 break;
