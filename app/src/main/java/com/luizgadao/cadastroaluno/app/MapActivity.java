@@ -1,35 +1,41 @@
 package com.luizgadao.cadastroaluno.app;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.luizgadao.cadastroaluno.app.fragment.MyMapFragment;
+import com.luizgadao.cadastroaluno.app.map.UpdatePosition;
 
 public class MapActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private UpdatePosition location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        MyMapFragment mapFragment = new MyMapFragment();
+
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.map, new MyMapFragment())
+                .add(R.id.map, mapFragment)
                 .commit();
 
-        //setUpMapIfNeeded();
+        location = new UpdatePosition(getBaseContext(), mapFragment);
+
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        //setUpMapIfNeeded();
+    protected void onDestroy() {
+        super.onDestroy();
+
+        location.cancel();
     }
 
     /**

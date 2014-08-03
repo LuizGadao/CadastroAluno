@@ -9,7 +9,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.luizgadao.cadastroaluno.app.dao.StudentDAO;
 import com.luizgadao.cadastroaluno.app.map.AnddressLocator;
+import com.luizgadao.cadastroaluno.app.model.Student;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,13 +31,30 @@ public class MyMapFragment extends SupportMapFragment {
     public void onStart() {
         super.onStart();
 
-        centerMap( new AnddressLocator(getActivity()).getCoords( "Patos de Minas rua Paraná 52" ) );
+        //centerMap( new AnddressLocator(getActivity()).getCoords( "Patos de Minas avenida Paranaíba 1495" ) );
+
+        StudentDAO studentDAO = new StudentDAO(getActivity());
+        List<Student> listStudents = studentDAO.getListStudents();
+        for ( Student student : listStudents )
+        {
+            LatLng latLng = new AnddressLocator( getActivity() ).getCoords( student.getAddress() );
+            MarkerOptions options = new MarkerOptions();
+            options.title( student.getName() );
+            options.position( latLng );
+
+            getMap().addMarker( options );
+        }
+
     }
 
-    private void centerMap( LatLng latLng ) {
+    public void centerMap( LatLng latLng ) {
         GoogleMap map = getMap();
-        map.animateCamera( CameraUpdateFactory.newLatLngZoom(latLng, 15) );
+        map.animateCamera( CameraUpdateFactory.newLatLngZoom(latLng, 14) );
 
-        map.addMarker( new MarkerOptions().position(latLng).title("Marcador") );
+        MarkerOptions options = new MarkerOptions();
+        options.position( latLng );
+        options.title("Location device");
+        map.addMarker( options );
+
     }
 }

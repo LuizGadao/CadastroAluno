@@ -1,10 +1,8 @@
 package com.luizgadao.cadastroaluno.app;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,7 +34,6 @@ public class DetailTest extends ActionBarActivity {
 
         ListView listView = (ListView) findViewById( R.id.list_topics );
         listView.setAdapter( adapter );
-
     }
 
 }
