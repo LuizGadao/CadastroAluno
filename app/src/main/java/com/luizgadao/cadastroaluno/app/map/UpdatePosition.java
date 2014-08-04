@@ -26,7 +26,7 @@ public class UpdatePosition implements LocationListener
         // antes de fazer requisição das coordenadas do gps, verificar se o gps esta disponível.
         // se não estiver pergunta o usuário se ele deseja ativar o gps.
         // se ele escolher que sim, chamar a intent do OS para faciliar para o usuário habilitar o recurso.
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 20, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000, 20, this);
 
         this.mapFragment = mapFragment;
     }
